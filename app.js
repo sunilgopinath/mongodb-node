@@ -1,10 +1,19 @@
-var http = require('http');
+var MongoClient = require('mongodb').MongoClient
 
-http.createServer(function(request, response){ 
-	console.log(" getting started in node ");
-	response.writeHeader(200, {"Content-Type":"text/plain"});
-	response.write("Hello, World!");
-	response.end();
-}).listen(8009)
+// Open the connection to the server
+MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
+	if(err) throw err;
+	
+	// Find one document in our collection
+	db.collection('coll').findOne({}, function(err, doc) {
+		if(err) throw err;
 
-console.log("server running on http://localhost:8009");
+		//Print the result
+		console.dir(doc);
+
+		// Close the DB
+		db.close();
+	});
+	// Declare success
+	console.dir("Called findOne!");
+});
